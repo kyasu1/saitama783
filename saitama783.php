@@ -1,0 +1,16 @@
+<?php
+/*
+ * Plugin Name: Site Plugin for saitama783.com
+ * Description: Site specific code changes for saitama783.com
+ * */
+/* Start Adding Functions Below this Line */
+
+include('admin/shopinfo_custom_taxonomy_area.php');
+register_activation_hook(__FILE__, array('area_terms', 'activate'));
+
+include('admin/shopinfo_custom_post_type.php');
+include('admin/shopinfo_custom_field.php');
+include('admin/shopinfo_template_loader.php');
+
+/* Stop Adding Functions Below this Line */
+?>

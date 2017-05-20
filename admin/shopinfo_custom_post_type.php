@@ -1,0 +1,42 @@
+<?php
+function shopinfo_custom_post_type()
+{
+  $labels = array(
+    'name' => _x('店舗情報', 'post type general name'),
+    'singular_name' => _x('店舗情報', 'post type singular name'),
+    'add_new' => _x('店舗情報を追加', 'shopinfo'),
+    'add_new_item' => __('新しい店舗情報を追加'),
+    'edit_item' => __('店舗情報を編集'),
+    'new_item' => __('新しい店舗情報'),
+    'view_item' => __('店舗情報を編集'),
+    'search_items' => __('店舗情報を探す'),
+    'not_found' => __('店舗情報はありません'),
+    'not_found_in_trash' => __('ゴミ箱に店舗情報はありませｎ'),
+    'parent_item_colon' => ''
+  );
+  $args = array(
+    'labels' => $labels,
+    'public' => true,
+    'publicly_queryable' => true,
+    'show_ui' => true,
+    'query_var' => true,
+    'rewrite' => true,
+    'capability_type' => 'post',
+    'hierarchical' => false,
+    'menu_position' => 5,
+    'has_archive' => true,
+    'supports' => array('title', 'editor', 'author'),
+    'taxonomies' => array('shopinfo_area', 'shopinfo_items')
+  );
+  register_post_type('shopinfo', $args);
+
+  $args = array(
+    'label' => '取扱品目',
+    'public' => true,
+    'show_ui' => true,
+    'hierarchical' => true
+  );
+  register_taxonomy('shopinfo_items', 'shopinfo', $args);
+}
+add_action('init', 'shopinfo_custom_post_type');
+?>
