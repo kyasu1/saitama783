@@ -29,20 +29,20 @@ $fields = array(
             <dl>
               <dt>住所</dt>
               <dd>〒<?php preg_match('/(.{3})(.{4})/', get_post_meta(get_the_ID(), 'shop_field_zip', true), $match); echo $match[1].'-'.$match[2]; ?></dd>
-              <dd><?php echo get_post_meta(get_the_ID(), 'shop_field_address', true); ?></dd>
-              <dd><?php echo get_post_meta(get_the_ID(), 'shop_field_tel', true); ?></dd>
+              <dd><?php echo esc_html(get_post_meta(get_the_ID(), 'shop_field_address', true)); ?></dd>
+              <dd><?php echo esc_html(get_post_meta(get_the_ID(), 'shop_field_tel', true)); ?></dd>
             </dl>
             <dl>
               <dt>定休日</dt>
-              <dd><?php echo get_post_meta(get_the_ID(), 'shop_field_closed', true); ?></dd>
+              <dd><?php echo esc_html(get_post_meta(get_the_ID(), 'shop_field_closed', true)); ?></dd>
             </dl>
             <dl>
               <dt>営業時間</dt>
-              <dd><?php echo get_post_meta(get_the_ID(), 'shop_field_opening', true); ?></dd>
+              <dd><?php echo esc_html(get_post_meta(get_the_ID(), 'shop_field_opening', true)); ?></dd>
             </dl>
             <dl>
               <dt>駐車場</dt>
-              <dd><?php echo get_post_meta(get_the_ID(), 'shop_field_parking', true); ?></dd>
+              <dd><?php echo esc_html(get_post_meta(get_the_ID(), 'shop_field_parking', true)); ?></dd>
             </dl>
             <?php
             $url = get_post_meta(get_the_ID(), 'shop_field_url', true); 
@@ -50,6 +50,22 @@ $fields = array(
               echo '<dl><dt>ホームページ</dt><dd><a href="http://'.$url.'">'.$url.'</a></dd></dl>';
             }
             ?>
+          </section>
+          <section>
+            <ul>
+              <?php
+                $images = array_filter(get_post_meta(get_the_ID(), 'shop_field_images', true));
+            if (!empty($images)) {
+              for ($i = 0; $i < count($images); $i++) {
+                $url = $images[$i]['image'];
+                if ($url) {
+                  echo '<li><img src='.$url.'></li>';
+                }
+              }
+            }
+              
+              ?>
+            </ul>
           </section>
           <?php
           /*
