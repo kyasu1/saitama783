@@ -25,6 +25,12 @@ $fields = array(
           <header class="entry-header">
             <?php the_title('<h1>', '</h1>'); ?>
           </header>
+            <section
+              id="map"
+              style="width: 600px; height: 600px;"
+              data-lat="<?php echo get_post_meta(get_the_ID(), 'shop_field_lat', true); ?>"
+              data-lng="<?php echo get_post_meta(get_the_ID(), 'shop_field_lng', true); ?>">
+          </section>
           <section>
             <dl>
               <dt>住所</dt>
@@ -54,29 +60,18 @@ $fields = array(
           <section>
             <ul>
               <?php
-                $images = array_filter(get_post_meta(get_the_ID(), 'shop_field_images', true));
-            if (!empty($images)) {
-              for ($i = 0; $i < count($images); $i++) {
-                $url = $images[$i]['image'];
-                if ($url) {
-                  echo '<li><img src='.$url.'></li>';
+                $images = get_post_meta(get_the_ID(), 'shop_field_images', true);
+                if (!empty($images)) {
+                  for ($i = 0; $i < count($images); $i++) {
+                    $url = $images[$i]['image'];
+                    if ($url) {
+                      echo '<li><img src='.$url.'></li>';
+                    }
+                  }
                 }
-              }
-            }
-              
               ?>
             </ul>
           </section>
-          <?php
-          /*
-          foreach ($fields as $key => $value) {
-            echo '<dl>';
-            echo '<dt>'.$key.'</dt>';
-            echo '<dd>'.get_post_meta(get_the_ID(), $value, true).'</dd>';
-            echo '</dl>';
-          }
-          */
-          ?>
           <div class="entry-content"><?php the_content(); ?></div>
         </article>
       <?php endwhile; ?>

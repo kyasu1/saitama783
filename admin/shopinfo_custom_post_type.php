@@ -25,7 +25,7 @@ function shopinfo_custom_post_type()
     'hierarchical' => false,
     'menu_position' => 5,
     'has_archive' => true,
-    'supports' => array('title', 'editor', 'author'),
+    'supports' => array('title', 'author', 'thumbnail'),
     'taxonomies' => array('shopinfo_area', 'shopinfo_items')
   );
   register_post_type('shopinfo', $args);
@@ -39,4 +39,21 @@ function shopinfo_custom_post_type()
   register_taxonomy('shopinfo_items', 'shopinfo', $args);
 }
 add_action('init', 'shopinfo_custom_post_type');
+
+function hide_category_add() {
+  global $pagenow;
+  global $post_type;
+  if (is_admin() && ($pagenow == 'post-new.php' || $pagenow == 'post.php') && $post_type == 'shopinfo') {
+    echo '
+<style type="text/css">
+  #shopinfo_items-adder {
+    display: none;
+  }
+  #shopinfo_items-tabs {
+    display: none;
+  }
+</style>';
+  }
+}
+add_action('admin_head', 'hide_category_add');
 ?>

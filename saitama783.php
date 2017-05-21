@@ -12,5 +12,7 @@ include('admin/shopinfo_custom_post_type.php');
 include('admin/shopinfo_custom_field.php');
 include('admin/shopinfo_template_loader.php');
 
+include('public/shopinfo_google_maps.php');
+include('public/shopinfo_search_form.php');
 /* Stop Adding Functions Below this Line */
 ?>

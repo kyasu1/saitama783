@@ -12,10 +12,14 @@ class shopinfo_template_loader {
   public static function template_loader($template) {
     $template_dir = plugin_dir_path(__DIR__) . 'templates/';
 
-    if (is_search() && 'shopinfo' == $_GET['s']) {
+    $type = 'shopinfo';
+
+    if (is_search() && $type == $_GET['post_type']) {
       $file_name = 'search-shopinfo.php';
-    } elseif (is_singular('shopinfo')) {
+    } elseif (is_singular($type)) {
       $file_name = 'single-shopinfo.php';
+    } elseif (is_post_type_archive($type)) {
+      $file_name = 'archive-shopinfo.php';
     }
 
     if (isset($file_name)) {
