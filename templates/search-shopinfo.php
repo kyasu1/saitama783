@@ -44,6 +44,10 @@ global $post;
 foreach ($results as $post) {
   setup_postdata($post);
   echo '<div><a href="'.get_permalink().'">'.get_the_title().'</a></div>';
+  echo '<div>';
+  echo '<div>'.round(($post->distance) , 1).'</div>';
+  echo '<div>Km</div>';
+  echo '</div>';
 }
 ?>
   </ul>
