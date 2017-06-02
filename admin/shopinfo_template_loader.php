@@ -17,9 +17,9 @@ class shopinfo_template_loader {
     if (is_search() && $type == $_GET['post_type']) {
       $file_name = 'search-shopinfo.php';
     } elseif (is_singular($type)) {
-      $file_name = 'single-shopinfo.php';
+      $file_name = 'single-shopinfo.blade.php';
     } elseif (is_post_type_archive($type)) {
-      $file_name = 'archive-shopinfo.php';
+      $file_name = 'archive-shopinfo.blade.php';
     }
 
     if (isset($file_name)) {

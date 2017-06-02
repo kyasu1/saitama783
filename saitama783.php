@@ -5,8 +5,8 @@
  * */
 /* Start Adding Functions Below this Line */
 
-include('admin/shopinfo_custom_taxonomy_area.php');
-register_activation_hook(__FILE__, array('area_terms', 'activate'));
+include('admin/shopinfo_custom_taxonomy.php');
+register_activation_hook(__FILE__, array('ShopinfoTaxonomy', 'activate'));
 
 include('admin/shopinfo_custom_post_type.php');
 include('admin/shopinfo_custom_field.php');

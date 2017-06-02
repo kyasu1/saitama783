@@ -6,16 +6,6 @@ Template Post Type: shopinfo
 
 get_header('shopinfo');
 
-$fields = array(
-  '郵便番号' => 'shop_field_zip',
-  '住所' => 'shop_field_address',
-  '電話番号' => 'shop_field_tel',
-  '定休日' => 'shop_field_closed',
-  '営業時間' => 'shop_field_opening',
-  'ホームページ' => 'shop_field_url',
-  '駐車場' => 'shop_field_parking',
-)
-
 ?>
 <div class="wrap">
   <div id="primary" class="content-area">

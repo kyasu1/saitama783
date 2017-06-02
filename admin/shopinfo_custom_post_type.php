@@ -29,14 +29,6 @@ function shopinfo_custom_post_type()
     'taxonomies' => array('shopinfo_area', 'shopinfo_items')
   );
   register_post_type('shopinfo', $args);
-
-  $args = array(
-    'label' => '取扱品目',
-    'public' => true,
-    'show_ui' => true,
-    'hierarchical' => true
-  );
-  register_taxonomy('shopinfo_items', 'shopinfo', $args);
 }
 add_action('init', 'shopinfo_custom_post_type');
 

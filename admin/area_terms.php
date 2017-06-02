@@ -1,10 +1,13 @@
 <?php
 
-$area_code = array(
+$area_terms = array(
 	'niiza' => '新座市',
 	'asaka' => '朝霞市',
 	'wako' => '和光市',
-	'saitama' => 'さいたま市',
+  'oomiya' => 'さいたま市大宮区',
+  'urawa' => 'さいたま市浦和区',
+  'iwatsuki' => 'さいたま市岩槻区',
+  'minami' => 'さいたま市南区',
 	'hanyuu' => '羽生市',
 	'ageo' => '上尾市',
 	'kitamoto' => '北本市',

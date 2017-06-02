@@ -1,4 +1,31 @@
 <?php
+/* helper functions for text input */
+function create_form_input($post, $field) {
+  $value = esc_html(get_post_meta($post->ID, $field, true));
+  echo "<input name='$field' style='width: 100%;' value='$value' />";
+}
+
+/* helper function for radio button with true or false */
+function create_form_radio_toggle($post, $field) {
+  $value = get_post_meta($post->ID, $field, true);
+  $id_for_true = $field . '-true';
+  $id_for_false = $field . '-false';
+  if ($value === 'あり') {
+    $checked_true = 'checked';
+    $checked_false = '';
+  } else {
+    $checked_true = '';
+    $checked_false = 'checked';
+  }
+  echo "<input type='radio' id=$id_for_true  name=$field value='あり' $checked_true>";
+  echo "<label for=$id_for_true>あり</label>";
+  echo "<input type='radio' id=$id_for_false name=$field value='あり' $checked_false>";
+  echo "<label for=$id_for_false>なし</label>";
+}
+
+/* custom field definitions start from here */
+
+/* number of images to support */
 const NUM_IMAGES = 6;
 
 function add_shopinfo_field() {
@@ -10,6 +37,9 @@ function add_shopinfo_field() {
   add_meta_box('shopinfo-opening', '営業時間', 'create_form_shopinfo_opening','shopinfo', 'normal');
   add_meta_box('shopinfo-url', 'ホームページ', 'create_form_shopinfo_url', 'shopinfo', 'normal');
   add_meta_box('shopinfo-parking', '駐車場', 'create_form_shopinfo_parking', 'shopinfo', 'normal');
+  add_meta_box('shopinfo-shopping', '店頭販売', 'create_form_shopinfo_shopping', 'shopinfo', 'normal');
+  add_meta_box('shopinfo-mailorder', '通信販売', 'create_form_shopinfo_mailorder', 'shopinfo', 'normal');
+  add_meta_box('shopinfo-notice', 'ひとこと', 'create_form_shopinfo_notice', 'shopinfo', 'normal');
   add_meta_box('shopinfo-lng', '経度', 'create_form_shopinfo_lng', 'shopinfo', 'normal');
   add_meta_box('shopinfo-lat', '緯度', 'create_form_shopinfo_lat', 'shopinfo', 'normal');
 
@@ -17,43 +47,57 @@ function add_shopinfo_field() {
 }
 
 function create_form_shopinfo_name($post) {
-  echo '<input name="shop_field_name" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_name', true).'"/>';
+  create_form_input($post, 'shop_field_name');
 }
 
 function create_form_shopinfo_zip($post) {
-  echo '<input name="shop_field_zip" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_zip', true).'"/>';
+  create_form_input($post, 'shop_field_zip');
 }
 
 function create_form_shopinfo_address($post) {
-  echo '<input name="shop_field_address" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_address', true).'"/>';
+  create_form_input($post, 'shop_field_address');
 }
 
 function create_form_shopinfo_tel($post) {
-  echo '<input name="shop_field_tel" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_tel', true).'"/>';
+  create_form_input($post, 'shop_field_tel');
 }
 
 function create_form_shopinfo_closed($post) {
-  echo '<input name="shop_field_closed" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_closed', true).'"/>';
+  create_form_input($post, 'shop_field_closed');
 }
 
 function create_form_shopinfo_opening($post) {
-  echo '<input name="shop_field_opening" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_opening', true).'"/>';
+  create_form_input($post, 'shop_field_opening');
 }
 
 function create_form_shopinfo_url($post) {
-  echo '<input name="shop_field_url" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_url', true).'"/>';
+  create_form_input($post, 'shop_field_url');
 }
 
 function create_form_shopinfo_parking($post) {
-  echo '<input name="shop_field_parking" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_parking', true).'"/>';
+  create_form_radio_toggle($post, 'shop_field_parking');
+}
+
+function create_form_shopinfo_shopping($post) {
+  create_form_radio_toggle($post, 'shop_field_shopping');
+}
+
+function create_form_shopinfo_mailorder($post) {
+  create_form_radio_toggle($post, 'shop_field_mailorder');
+}
+
+function create_form_shopinfo_notice($post) {
+  echo '<textarea name="shop_field_notice" style="width: 100%;">';
+  echo esc_html(get_post_meta($post->ID, 'shop_field_notice', true));
+  echo '</textarea>';
 }
 
 function create_form_shopinfo_lng($post) {
-  echo '<input name="shop_field_lng" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_lng', true).'"/>';
+  create_form_input($post, 'shop_field_lng');
 }
 
 function create_form_shopinfo_lat($post) {
-  echo '<input name="shop_field_lat" style="width: 100%;" value="'.get_post_meta($post->ID, 'shop_field_lat', true).'"/>';
+  create_form_input($post, 'shop_field_lat');
 }
 
 function create_form_shopinfo_images($post) {
@@ -89,6 +133,9 @@ function save_shopinfo_field($post_id) {
     'shop_field_opening',
     'shop_field_url',
     'shop_field_parking',
+    'shop_field_shopping',
+    'shop_field_mailorder',
+    'shop_field_notice',
     'shop_field_lng',
     'shop_field_lat'
   ];

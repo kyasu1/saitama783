@@ -7,28 +7,35 @@
  * http://sudarmuthu.com/blog/creating-single-select-wordpress-taxonomies/
  */
 
-class AreaTerms {
+class ShopinfoTaxonomy {
   public function __construct() {
     register_activation_hook(__FILE__, array($this, 'activate'));
-    add_action('init', array($this, 'register_area_taxonomy'));
+    add_action('init', array($this, 'register_taxonomy'));
     add_action('save_post_shopinfo', array($this, 'save_area_meta_box'));
   }
 
   public function activate() {
-    static::register_area_taxonomy();
-    static::register_area_terms();
+    static::register_taxonomy();
+    static::register_terms();
   }
 
-  static function register_area_taxonomy() {
-    $args = array(
+  static function register_taxonomy() {
+    $area_args = array(
       'label' => 'エリア',
       'public' => true,
       'show_ui' => true,
       'hierarchical' => false,
-      'meta_box_cb' => array('AreaTerms', 'shopinfo_area_meta_box')
+      'meta_box_cb' => array('ShopinfoTaxonomy', 'shopinfo_area_meta_box')
     );
-    
-    register_taxonomy('shopinfo_area', 'shopinfo', $args);
+    register_taxonomy('shopinfo_area', 'shopinfo', $area_args);
+  
+    $item_args = array(
+      'label' => '取扱品目',
+      'public' => true,
+      'show_ui' => true,
+      'hierarchical' => true
+    );
+    register_taxonomy('shopinfo_items', 'shopinfo', $item_args);
   }
 
   /*
@@ -56,7 +63,7 @@ class AreaTerms {
   }
 
   /*
-   * Save the area select box result.
+   * Save selected terms
    */
   function save_area_meta_box($post_id) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -86,17 +93,26 @@ class AreaTerms {
     }
   }
 
-  static function register_area_terms() {
-    $taxonomy = 'shopinfo_area';
-    
-		include('area_code.php');
-
-    foreach ($area_code as $slug => $name) {
+  static function register_terms() {
+		include('area_terms.php');
+    foreach ($area_terms as $slug => $name) {
       wp_insert_term(
         $name,
-        $taxonomy,
+        'shopinfo_area',
         array(
           'description' => '',
+          'slug' => $slug,
+        )
+      );
+    }
+
+    include('item_terms.php');
+    foreach ($item_terms as $slug => $name) {
+      wp_insert_term(
+        $name,
+        'shopinfo_items',
+        array(
+          'descriptions' => '',
           'slug' => $slug,
         )
       );
@@ -111,5 +127,5 @@ class AreaTerms {
    */
 }
 
-new AreaTerms();
+new ShopinfoTaxonomy();
 ?>
