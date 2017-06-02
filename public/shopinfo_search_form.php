@@ -15,25 +15,39 @@ function shopinfo_search_form($form) {
 add_shortcode('shopinfo-search', 'shopinfo_search_form');
 
 function draw_area_select_box() {
+  $shopinfo_area = $_REQUEST['shopinfo_area'];
+
   $areas = get_terms('shopinfo_area');
   echo "<div class='shopinfo-area'>";
   echo "<label>エリアを選択してください</label>";
   echo "<select name='shopinfo_area'>";
   foreach($areas as $area) {
-    echo "<option value=$area->name>$area->name</option>";
+    $selected = $shopinfo_area === $area->name ? 'selected' : '';
+    echo "<option value=$area->name $selected>$area->name</option>";
   }
   echo "</select>";
   echo "</div>";
 }
 
 function draw_items_check_boxes() {
+  $options = $_REQUEST['shopinfo_items'];
+
   $items = get_terms('shopinfo_items');
   echo "<div class='shopinfo-items'>";
   echo "<label>お探しの取扱品目をチェックして下さい</label>";
   echo "<ul>";
   foreach ($items as $item) {
+    $checked = '';
+    if (isset($options)) {
+      foreach($options as $option) {
+        if ($option == $item->term_id) {
+          $checked = 'checked';
+          break;
+        }
+      }
+    }
     $input_id = 'shopinfo-items-checkbox-' . $item->term_id;
-    echo "<input type='checkbox' id='$input_id' name='shopinfo_items' value='$item->term_id'>";
+    echo "<input type='checkbox' id='$input_id' name='shopinfo_items[]' value='$item->term_id' $checked>";
     echo "<label for='$input_id'>$item->name</label>";
   }
   echo "</ul>";
