@@ -1,38 +1,50 @@
-<?php
-/*
-Template Name: Shop Info Archive
-Template Post Type: shopinfo
- */
+<?php 
+$lat = isset($_REQUEST['lat']) ? $_REQUEST['lat'] : 35.8577210;
+$lng = isset($_REQUEST['lng']) ? $_REQUEST['lng'] : 139.647804;
+$s = $_REQUEST['s'];
 
-get_header('shopinfo');
+global $wpdb;
 
+$keyword = '%' . $wpdb->esc_like($s) . '%';
+$query = $wpdb->prepare("
+SELECT p.*,
+p1.meta_value AS shop_field_lat,
+p2.meta_value AS shop_field_lng,
+Glength(GeomFromText(Concat('LineString(', %f, ' ', %f, ', ', p1.meta_value, ' ', p2.meta_value, ')'))) * 112.12 AS distance
+FROM $wpdb->posts p
+LEFT JOIN $wpdb->postmeta AS p1 ON p1.post_id = p.ID
+LEFT JOIN $wpdb->postmeta AS p2 ON p1.post_id = p2.post_id
+WHERE p1.meta_key = 'shop_field_lat' AND p2.meta_key = 'shop_field_lng'
+AND p.post_status = 'publish'
+AND p.post_type = 'shopinfo'
+AND p.post_title LIKE '%s'
+ORDER BY distance
+ ",
+$lat,
+  $lng,
+  $keyword
+);
+
+$results = $wpdb->get_results($query);
 ?>
-<div class="wrap">
-  <div id="primary" class="content-area">
-    <main id="main" class="site-main" role="main">
 
-      <h2>検索結果</h2>
-      <div id="archive-content">
-        <?php if (have_posts()) : ?>
-          <ul>
-          <?php  while(have_posts()) : the_post(); ?>
-          <li class="archive-shopinfo-shop">
-            <a href="<?php the_permalink($post); ?>">
-              <div class="archive-shopinfo-shop-thumbnail"><?php the_post_thumbnail(array(100, 100)); ?></div>
-              <div class="archive-shopinfo-shop-name"><?php the_title(); ?></div>
-              <div class="archive-shopinfo-shop-address"><?php echo get_post_meta($post->ID, 'shop_field_address', true); ?></div>
-              <div class="archive-shopinfo-shop-tel"><?php echo get_post_meta($post->ID, 'shop_field_tel', true); ?></div>
-            </a>
-          </li>
-          <?php endwhile; ?>
-          </ul>
-        <?php else: ?>
-          <h3>見つかりませんでした...</h3>
-        <?php endif; ?>
-      </div><!-- #archive-content -->
-    </main>
-  </div>
-</div>
+  <header><strong><?php echo $_REQUEST['s']; ?></strong>の検索結果：<?php echo $wpdb->num_rows; ?></header>
+
+<main class="flex flex-column-reverse flex-row-l ph2">
+  <header class="w-100 w5-l flex-shrink-0 pa2">
+  <?php do_shortcode('[shopinfo-complex-search]'); ?>
+  </header>
+
+  <ul class="list pl0 w-100">
+    <?php if (!$results) { ?>
+      <div class="alert alert-warning"> 見つかりませんでした。 </div>
+    <?php } ?>
 <?php
-get_footer();
+global $post;
+foreach ($results as $post) {
+  setup_postdata($post);
+  echo '<div><a href="'.get_permalink().'">'.get_the_title().'</a></div>';
+}
 ?>
+  </ul>
+  </main>
