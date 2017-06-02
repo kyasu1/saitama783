@@ -1,29 +1,45 @@
 # About
 埼玉県質屋組合連合会向けの店舗情報カスタム投稿タイプとその検索を行うためのプラグインになります。
 
+## 初期データの投入
+初期データのcsvファイルを用意しますので、プラグイン[Really Simple CSV Importer](https://ja.wordpress.org/plugins/really-simple-csv-importer/)を使用してインポートして下さい。現状で取扱品目と画像以外は一度に読み込めます。
+
 ## カスタム投稿タイプ
 `shopinfo`
 
 ## カスタムフィールド
 - 店舗名
+  `shop_field_name`
 - 郵便番号
+  `shop_field_zip`
 - 住所
+  `shop_field_address`
 - 電話番号
+  `shop_field_tel`
 - 定休日
+  `shop_field_closed`
 - 営業時間
+  `shop_field_open`
 - ホームページ
+  `shop_field_url`
 - 駐車場
+  `shop_field_parking`
   - あり
   - なし
 - 店頭販売
+  `shop_field_shopping`
   - あり
   - なし
 - 通信販売
+  `shop_field_mailorder`
   - あり
   - なし
 - ひとこと
+  `shop_field_notice`
 - 緯度
+  `shop_field_lat`
 - 経度
+  `shop_field_lng`
 
 ## カスタムタクソノミー
 ### エリア `shopinfo_area`
@@ -86,3 +102,9 @@ $results = $wpdb->get_results($query);
 ### 市区町村と取扱品目でフィルターされた結果を表示する
 
 ### 路線と駅を基準に近い順に10件を表示する
+
+### TODO
+- [ ] 複数のURLに対応する
+- [ ] 画像も一緒にアップロードできるようにする
+- [ ] カスタムタクソノミーでの検索
+- [ ] 沿線と最寄り駅での検索

@@ -18,7 +18,7 @@ function draw_area_select_box() {
   $areas = get_terms('shopinfo_area');
   echo "<div class='shopinfo-area'>";
   echo "<label>エリアを選択してください</label>";
-  echo "<select name='shopinfo-area'>";
+  echo "<select name='shopinfo_area'>";
   foreach($areas as $area) {
     echo "<option value=$area->name>$area->name</option>";
   }
@@ -33,7 +33,8 @@ function draw_items_check_boxes() {
   echo "<ul>";
   foreach ($items as $item) {
     $input_id = 'shopinfo-items-checkbox-' . $item->term_id;
-    echo "<input id='$input_id' type='checkbox' value='$item->term_id'><label for='$input_id'>$item->name</label>";
+    echo "<input type='checkbox' id='$input_id' name='shopinfo_items' value='$item->term_id'>";
+    echo "<label for='$input_id'>$item->name</label>";
   }
   echo "</ul>";
   echo "</div>";
@@ -42,8 +43,13 @@ function draw_items_check_boxes() {
 function shopinfo_complex_search_form($attr) {
   global $wpdb;
 
+  echo "<form class='shopinfo-complex-search' role='search' action=''";
   draw_area_select_box();
   draw_items_check_boxes();
+  echo "<input type='hidden' name='s' value=''>";
+  echo "<input type='hidden' name='post_type' value='shopinfo'>";
+  echo "<input type='submit' value='検索'>";
+  echo "</form>";
 }
 add_shortcode('shopinfo-complex-search', 'shopinfo_complex_search_form');
 
