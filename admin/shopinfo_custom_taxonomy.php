@@ -36,6 +36,14 @@ class ShopinfoTaxonomy {
       'hierarchical' => true
     );
     register_taxonomy('shopinfo_items', 'shopinfo', $item_args);
+
+    $station_args = array(
+      'label' => '最寄り駅',
+      'public' => true,
+      'shouw_ui' => true,
+      'hierarchical' => true,
+    );
+    register_taxonomy('shopinfo_stations', 'shopinfo', $station_args);
   }
 
   /*
@@ -116,6 +124,31 @@ class ShopinfoTaxonomy {
           'slug' => $slug,
         )
       );
+    }
+
+    /* load station master data from the csv file */
+    setlocale( LC_ALL, 'ja_JP' );
+
+    $csv = file_get_contents(plugin_dir_path( __FILE__ ).'stations.csv');
+    $csv = str_replace(array("\r\n","\r","\n"), "\n", $csv);
+    $csv = explode("\n", $csv);
+    array_shift($csv);
+
+    $stations = array_map(str_getcsv, $csv);
+
+    /* register all parent terms */
+    foreach($stations as $station) {
+      if ($station[2] == '') {
+        wp_insert_term($station[0], 'shopinfo_stations', array( 'slug' => $station[1] ));
+      }
+    }
+
+    /* register all child terms */
+    foreach($stations as $station) {
+      if ($station[2] != '') {
+        $parent = get_term_by('name', $station[2], 'shopinfo_stations');
+        wp_insert_term($station[0], 'shopinfo_stations', array( 'slug' => $parent->slug.'-'.$station[1], 'parent' => $parent->term_id ));
+      }
     }
   }
     

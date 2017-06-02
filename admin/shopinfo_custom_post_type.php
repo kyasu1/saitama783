@@ -26,7 +26,7 @@ function shopinfo_custom_post_type()
     'menu_position' => 5,
     'has_archive' => true,
     'supports' => array('title', 'author', 'thumbnail'),
-    'taxonomies' => array('shopinfo_area', 'shopinfo_items')
+    'taxonomies' => array('shopinfo_area', 'shopinfo_items', 'shopinfo_stations')
   );
   register_post_type('shopinfo', $args);
 }
