@@ -4,69 +4,48 @@
  */
 
 function shopinfo_search_form($form) {
-  $form ='
-<form class="shopinfo-search" role="search" action="'.home_url('/').'">
-  <input type="search" name="s" placeholder="エリア・店名・最寄り駅で検索">
-  <input type="submit" value="検索">
-  <input type="hidden" name="post_type" value="shopinfo">
-</form>
-';
-  return $form;
+?>
+  <form class="shopinfo-search" role="search" action="<?php echo home_url('/'); ?>">
+    <input type="search" name="s" placeholder="店名で検索">
+    <input type="submit" value="検索">
+    <input type="hidden" name="post_type" value="shopinfo">
+  </form>
+<?php
 }
-
 add_shortcode('shopinfo-search', 'shopinfo_search_form');
 
-/*
- * Extends wordpress search to include custom fields
- */
-/**
- * Join posts and postmeta tables
- *
- * http://codex.wordpress.org/Plugin_API/Filter_Reference/posts_join
- */
-function cf_search_join( $join ) {
+function draw_area_select_box() {
+  $areas = get_terms('shopinfo_area');
+  echo "<div class='shopinfo-area'>";
+  echo "<label>エリアを選択してください</label>";
+  echo "<select name='shopinfo-area'>";
+  foreach($areas as $area) {
+    echo "<option value=$area->name>$area->name</option>";
+  }
+  echo "</select>";
+  echo "</div>";
+}
+
+function draw_items_check_boxes() {
+  $items = get_terms('shopinfo_items');
+  echo "<div class='shopinfo-items'>";
+  echo "<label>お探しの取扱品目をチェックして下さい</label>";
+  echo "<ul>";
+  foreach ($items as $item) {
+    $input_id = 'shopinfo-items-checkbox-' . $item->term_id;
+    echo "<input id='$input_id' type='checkbox' value='$item->term_id'><label for='$input_id'>$item->name</label>";
+  }
+  echo "</ul>";
+  echo "</div>";
+}
+
+function shopinfo_complex_search_form($attr) {
   global $wpdb;
 
-  if ( is_search() ) {    
-    $join .=' LEFT JOIN '.$wpdb->postmeta. ' ON '. $wpdb->posts . '.ID = ' . $wpdb->postmeta . '.post_id ';
-  }
-
-  return $join;
+  draw_area_select_box();
+  draw_items_check_boxes();
 }
-add_filter('posts_join', 'cf_search_join' );
+add_shortcode('shopinfo-complex-search', 'shopinfo_complex_search_form');
 
-/**
- * Modify the search query with posts_where
- *
- * http://codex.wordpress.org/Plugin_API/Filter_Reference/posts_where
- */
-function cf_search_where( $where ) {
-  global $wpdb;
-
-  if ( is_search() ) {
-    $where = preg_replace(
-      "/\(\s*".$wpdb->posts.".post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
-      "(".$wpdb->posts.".post_title LIKE $1) OR (".$wpdb->postmeta.".meta_value LIKE $1)", $where );
-  }
-
-  return $where;
-}
-add_filter( 'posts_where', 'cf_search_where' );
-
-/**
- * Prevent duplicates
- *
- * http://codex.wordpress.org/Plugin_API/Filter_Reference/posts_distinct
- */
-function cf_search_distinct( $where ) {
-  global $wpdb;
-
-  if ( is_search() ) {
-    return "DISTINCT";
-  }
-
-  return $where;
-}
-add_filter( 'posts_distinct', 'cf_search_distinct' );
 
 ?>

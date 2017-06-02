@@ -45,3 +45,44 @@
   - 大宮駅
   - 浦和駅
   - 北浦和駅
+- 東武スカイツリーライン
+  - 新越谷駅
+  - 蒲生駅
+
+## ループ
+### 基準点からの距離を計算してソートする
+基準点はクエリパラメータの`lat`および`lng`にて与えられる。もしこれらのパラメータが存在しない場合は、浦和県庁の位置情報をデフォルトとする。
+```php
+<?php
+$lat = isset($_REQUEST['lat']) ? $_REQUEST['lat'] : 35.8577210;
+$lng = isset($_REQUEST['lng']) ? $_REQUEST['lng'] : 139.647804;
+$s = $_REQUEST['s'];
+
+global $wpdb;
+
+$keyword = '%' . $wpdb->esc_like($s) . '%';
+$query = $wpdb->prepare("
+SELECT p.*,
+p1.meta_value AS shop_field_lat,
+p2.meta_value AS shop_field_lng,
+Glength(GeomFromText(Concat('LineString(', %f, ' ', %f, ', ', p1.meta_value, ' ', p2.meta_value, ')'))) * 112.12 AS distance
+FROM $wpdb->posts p
+LEFT JOIN $wpdb->postmeta AS p1 ON p1.post_id = p.ID
+LEFT JOIN $wpdb->postmeta AS p2 ON p1.post_id = p2.post_id
+WHERE p1.meta_key = 'shop_field_lat' AND p2.meta_key = 'shop_field_lng'
+AND p.post_status = 'publish'
+AND p.post_type = 'shopinfo'
+AND p.post_title LIKE '%s'
+ORDER BY distance
+ ",
+$lat,
+$lng,
+$keyword
+);
+
+$results = $wpdb->get_results($query);
+?>
+```
+### 市区町村と取扱品目でフィルターされた結果を表示する
+
+### 路線と駅を基準に近い順に10件を表示する

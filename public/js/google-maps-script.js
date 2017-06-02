@@ -5,6 +5,8 @@
 (function() {
   var dom = document.getElementById('map');
 
+  if (!dom) return;
+
   var center = {
     lat: parseFloat(dom.getAttribute('data-lat')),
     lng: parseFloat(dom.getAttribute('data-lng')),
