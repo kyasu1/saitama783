@@ -4,6 +4,14 @@
 ## 初期データの投入
 初期データのcsvファイルを用意しますので、プラグイン[Really Simple CSV Importer](https://ja.wordpress.org/plugins/really-simple-csv-importer/)を使用してインポートして下さい。現状で取扱品目と画像以外は一度に読み込めます。
 
+## テンプレートのオーバーライド
+テスト用に作った下記ののテンプレートが`templates`以下に用意してあります。
+- `archive-shopinfo.php`
+- `single-shopinfo.php`
+- `search-shopinfo.php`
+
+これらを、テーマフォルダの中へコピーするか、新たに同名で作成することにより、自動的にカスタマイズ可能となります。
+
 ## カスタム投稿タイプ
 `shopinfo`
 
@@ -57,6 +65,7 @@
   - goldandplatinum
 
 ### 路線 `shopinfo_train_routes`
+未実装
 - JR京浜東北線
   - 大宮駅
   - 浦和駅
@@ -146,8 +155,11 @@ $results = $wpdb->get_results($query);
 ?>
 ```
 ### 路線と駅を基準に近い順に10件を表示する
-
-### TODO
+```
+<?php
+?>
+```
+## TODO
 - [ ] 複数のURLに対応する
 - [ ] 画像も一緒にアップロードできるようにする
 - [x] カスタムタクソノミーでの検索
