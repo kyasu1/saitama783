@@ -18,7 +18,7 @@ add_shortcode('shopinfo-search', 'shopinfo_search_form');
  */
 function draw_area_select_box() {
   $shopinfo_area = $_REQUEST['shopinfo_area'];
-  $areas = get_terms('shopinfo_area');
+  $areas = get_terms('shopinfo_area', array( 'orderby' => 'term_id', 'hide_empty' => false) );
   echo "<div class='shopinfo-area'>";
   echo "<label>エリアを選択してください</label>";
   echo "<select name='shopinfo_area'>";
