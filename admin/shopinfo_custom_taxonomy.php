@@ -70,6 +70,9 @@ class ShopinfoTaxonomy {
     echo '</select>';
   }
 
+  /*
+   * 駅タームの親情報から辿れるので、路線のIDは保存しない。
+   */
   static function shopinfo_route_stations_meta_box( $post ) {
     $terms = get_terms('shopinfo_stations', array( 'orderby' => 'id', 'hide_empty' => false ));
 

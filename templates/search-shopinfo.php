@@ -42,11 +42,7 @@ ORDER BY distance
 $results = $wpdb->get_results($query);
 ?>
 
-  <header><strong><?php echo $_REQUEST['s']; ?></strong>の検索結果：<?php echo $wpdb->num_rows; ?></header>
-  <div><?php 
-
-?>
-</div>
+<header><strong><?php echo $_REQUEST['s']; ?></strong>の検索結果：<?php echo $wpdb->num_rows; ?></header>
 <main class="flex flex-column-reverse flex-row-l ph2">
   <header class="w-100 w5-l flex-shrink-0 pa2">
   <?php do_shortcode('[shopinfo-complex-search]'); ?>
@@ -56,16 +52,16 @@ $results = $wpdb->get_results($query);
     <?php if (!$results) { ?>
       <div class="alert alert-warning"> 見つかりませんでした。 </div>
     <?php } ?>
-<?php
-global $post;
-foreach ($results as $post) {
-  setup_postdata($post);
-  echo '<div><a href="'.get_permalink().'">'.get_the_title().'</a></div>';
-  echo '<div>';
-  echo '<div>'.round(($post->distance) , 1).'</div>';
-  echo '<div>Km</div>';
-  echo '</div>';
-}
-?>
+    <?php
+      global $post;
+      foreach ($results as $post) {
+        setup_postdata($post);
+        echo '<div><a href="'.get_permalink().'">'.get_the_title().'</a></div>';
+        echo '<div>';
+        echo '<div>'.round(($post->distance) , 1).'</div>';
+        echo '<div>Km</div>';
+        echo '</div>';
+      }
+    ?>
   </ul>
-  </main>
+</main>

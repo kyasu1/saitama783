@@ -36,7 +36,7 @@ function draw_area_select_box() {
 function draw_items_check_boxes() {
   $options = $_REQUEST['shopinfo_items'];
 
-  $items = get_terms('shopinfo_items');
+  $items = get_terms( 'shopinfo_items', array( 'orderby' => 'term_id', 'hide_empty' => false) );
   echo "<div class='shopinfo-items'>";
   echo "<label>お探しの取扱品目をチェックして下さい</label>";
   echo "<ul>";
@@ -79,14 +79,62 @@ add_shortcode('shopinfo-complex-search', 'shopinfo_complex_search_form');
  * 沿線と駅から検索するフォームを表示するショートコードを定義
  */
 function shopinfo_route_station_search_form($attr) {
+  $route_id = $_REQUEST['route_id'];
+
+  $terms = get_terms( 'shopinfo_stations', array( 'orderby' => 'term_id', 'hide_empty' => false ) );
+  $routes = array_filter( $terms, function($term) { return $term->parent == 0; } );
+  $stations = array_filter( $terms, function($term) use($route_id) { return $term->parent == $route_id; } );
 ?>
-  <form id="shopinfo-search" role="search" action="<?php echo esc_url(home_url('/')); ?>">
-    <input type="hidden" name="s" value="">
-    <input type="hidden" name="post_type" value="shopinfo">
-    <input type="submit" value="検索">
-  </form>
+  <div class='shopinfo-routes'>
+    <label>路線を選んください</label>
+    <ul name='shopinfo-route'>
+      <?php foreach ($routes as $route): if ($route->term_id == $route_id): ?>
+      <li>
+        <?php echo esc_html($route->name); ?>
+      </li>
+      <?php else: ?>
+      <li>
+        <a href="/shoplist/?route_id=<?php echo esc_attr($route->term_id); ?>"><?php echo esc_html($route->name); ?></a>
+      </li>
+      <?php endif; endforeach; ?>
+    </ul>
+  </div>
+  <div class="shopinfo-stations">
+    <label>駅を選んで下さい</label>
+    <ul>
+      <?php foreach ($stations as $station): ?>
+      <li>
+        <a href="#shopinfo_station_<?php echo esc_attr($station->term_id); ?>">
+          <?php echo esc_html($station->name); ?>
+          <span>(<?php echo esc_html($station->count); ?>)</span>
+        </a>
+      </li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+  <ul>
+    <?php foreach ($stations as $station): ?>
+    <li id="shopinfo_station_<?php echo esc_attr($station->term_id); ?>">
+      <ul>
+        <?php $shops = get_posts(
+                array(
+                  'post_type' => 'shopinfo',
+                  'tax_query' => array(
+                    array(
+                      'taxonomy' => 'shopinfo_stations',
+                      'field' => 'term_id',
+                      'terms' => $station->term_id
+                    )
+                  )
+                )
+              );
+          var_dump($shops);
+        ?>
+      </ul>
+    </li>
+    <?php endforeach; ?>
+  </ul>
 <?php
 }
 add_shortcode('shopinfo-route-station-search', 'shopinfo_route_station_search_form');
-
 ?>
