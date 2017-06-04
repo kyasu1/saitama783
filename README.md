@@ -56,7 +56,7 @@
 ### エリア `shopinfo_area`
 一つの投稿に対して必ず一つだけ存在する
 - さいたま市大宮区
-  - oomiya
+  - omiya
 - さいたま市浦和区
   - urawa
 
@@ -68,7 +68,6 @@
   - goldandplatinum
 
 ### 路線 `shopinfo_train_routes`
-未実装
 - JR京浜東北線
   - 大宮駅
   - 浦和駅
@@ -92,12 +91,12 @@
 - `lng`
 
 ### 市区町村と取扱品目でフィルターされた結果を表示する
-```php
+```
 [shopinfo-complex-search slug='area-items']
 ```
 - `slug`には固定ページのスラッグを指定する
 
-### 路線と駅からお店の一覧を表示するショートコード
+### 路線と駅からお店の一覧を表示する
 ```
 [shopinfo-route-station-search slug='route-station']
 ```
