@@ -4,6 +4,9 @@
     <div class="archive-shopinfo-shop-name"><?php the_title(); ?></div>
     <div class="archive-shopinfo-shop-address"><?php echo get_post_meta(get_the_ID(), 'shop_field_address', true); ?></div>
     <div class="archive-shopinfo-shop-tel"><?php echo get_post_meta(get_the_ID(), 'shop_field_tel', true); ?></div>
+    <?php if (isset($post->distance)) : ?>
+      <div><?php echo round(esc_html($post->distance), 1); ?>Km</div>
+    <?php endif; ?>
   </a>
 </li>
  

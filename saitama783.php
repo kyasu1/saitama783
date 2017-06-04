@@ -15,5 +15,8 @@ include('admin/shopinfo_get_template.php');
 
 include('public/shopinfo_google_maps.php');
 include('public/shopinfo_search_form.php');
+include('public/shopinfo_complex_search.php');
+include('public/shopinfo_route_station_search.php');
+
 /* Stop Adding Functions Below this Line */
 ?>
