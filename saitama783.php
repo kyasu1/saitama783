@@ -11,6 +11,7 @@ register_activation_hook(__FILE__, array('ShopinfoTaxonomy', 'activate'));
 include('admin/shopinfo_custom_post_type.php');
 include('admin/shopinfo_custom_field.php');
 include('admin/shopinfo_template_loader.php');
+include('admin/shopinfo_get_template.php');
 
 include('public/shopinfo_google_maps.php');
 include('public/shopinfo_search_form.php');
