@@ -1,4 +1,5 @@
 <li>
+  <?php $post = get_post($post); ?>
   <a href="<?php the_permalink(); ?>">
     <div class="archive-shopinfo-shop-thumbnail"><?php echo get_the_post_thumbnail(get_the_ID(), array(100, 100)); ?></div>
     <div class="archive-shopinfo-shop-name"><?php the_title(); ?></div>
