@@ -54,6 +54,7 @@ function draw_items_check_boxes() {
 function shopinfo_complex_search_form($attr) {
   $a = shortcode_atts( array(
     'slug' => 'area-items',
+    'noresult' => false,
   ), $attr );
 ?>
 <form class="shopinfo-complex-search" role="search" action="<?php echo esc_url(home_url('/')); ?>" action="/area-items/">
@@ -64,6 +65,7 @@ function shopinfo_complex_search_form($attr) {
   <input type="hidden" name="page" value="<?php echo esc_attr($a['slug']); ?>">
   <input type="submit" value="検索">
 </form>
+<?php if ($a['noresult']) { return; } /* `noresult`がtrueの場合は結果を表示しない*/ ?>
 <?php
   $lat = isset($_REQUEST['lat']) ? $_REQUEST['lat'] : 35.8577210;
   $lng = isset($_REQUEST['lng']) ? $_REQUEST['lng'] : 139.647804;
